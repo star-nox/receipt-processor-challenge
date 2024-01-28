@@ -1,7 +1,6 @@
 from flask import (Flask, Response, jsonify, abort, request)
 from receipt_processing import generate_id, generate_points
 
-
 app = Flask(__name__)
 
 RECEIPTS = {}
@@ -34,6 +33,7 @@ def points_awarded(id) -> Response:
     points = generate_points(id)
     
     return jsonify(points)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

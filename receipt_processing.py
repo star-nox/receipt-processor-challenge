@@ -1,5 +1,7 @@
 import uuid
 import re
+import math
+
 
 RECEIPTS = {}
 
@@ -19,7 +21,7 @@ def generate_id(data: dict) -> dict:
             id = str(uuid.uuid4())
 
         RECEIPTS[id] = data
-        
+
         return {'id': id}
     except Exception as e:
         print(e)
@@ -45,6 +47,7 @@ def generate_points(id: str) -> dict:
         receipt = RECEIPTS.get(id)
         
         print("Retrieved receipt: ", receipt)
+       
         total_points_awarded = retailer_points(receipt['retailer']) + total_points(receipt['total']) + items_points(receipt['items']) + description_points(receipt['items']) + date_points(receipt['purchaseDate']) + time_points(receipt['purchaseTime'])
         print(total_points_awarded)
         return {'points': total_points_awarded}
@@ -120,9 +123,11 @@ def description_points(items: list) -> int:
         for item in items:
             description = item['shortDescription']
             price = float(item['price'])
-
+            print("description length: ", len(description.strip()))
             if len(description.strip()) % 3 == 0:
-                points += round(price * 0.2)
+                print("price per item: ", price * 0.2)  
+                print("rounded price per item: ", math.ceil(price * 0.2))
+                points += math.ceil(price * 0.2)
         print("description: ", points)
         return points
     
