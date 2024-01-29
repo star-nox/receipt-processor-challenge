@@ -99,7 +99,6 @@ def total_points(total: str) -> int:
             points += 50
         if total % 0.25 == 0.0:
             points += 25
-        print("total: ", points)
         return points
     
     except Exception as e:
@@ -115,7 +114,6 @@ def items_points(items: list) -> int:
         int: The points awarded.
     """
     try:
-        print("items: ", len(items) // 2 * 5)
         return len(items) // 2 * 5
     
     except Exception as e:
@@ -137,7 +135,7 @@ def description_points(items: list) -> int:
             price = float(item['price'])
             if len(description.strip()) % 3 == 0:
                 points += math.ceil(price * 0.2)
-        print("description: ", points)
+        
         return points
     
     except Exception as e:
