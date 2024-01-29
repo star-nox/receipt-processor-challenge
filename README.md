@@ -41,7 +41,7 @@ curl -X POST "http://localhost:5000/receipts/process" -H  "Content-Type: applica
 ```
 GET request: 
 ```
-curl http://localhost/receipts/{id}/points
+curl http://localhost:5000/receipts/{id}/points
 ```
 
 2. Using Postman
