@@ -1,12 +1,58 @@
 # Receipt Processor
 
-Build a webservice that fulfils the documented API. The API is described below. A formal definition is provided 
-in the [api.yml](./api.yml) file, but the information in this README is sufficient for completion of this challenge. We will use the 
-described API to test your solution.
+The API is built in Flask. There is a Dockerfile present which one can use to run this app on any system.
 
-Provide any instructions required to run your application.
+## Instructions
 
-Data does not need to persist when your application stops. It is sufficient to store information in memory. There are too many different database solutions, we will not be installing a database on our system when testing your application.
+Install Docker on your PC. Link: https://docs.docker.com/engine/install/
+
+Clone the repository on your local PC using the below command:
+```
+git clone https://github.com/star-nox/receipt-processor-challenge.git
+```
+
+Navigate inside the cloned repository using the below command:
+```
+cd <path to repository>
+```
+
+The next step is building a docker image:
+```
+docker build --tag fetch-image .
+```
+
+To check if it is created without errors: `docker images`
+
+To run the docker image:
+```
+docker run -p 5000:5000 fetch-image
+```
+
+Testing the API:
+
+1. Using CURL
+
+POST request:
+```
+curl -X POST "http://localhost:5000/receipts/process" -H  "Content-Type: application/json" -H "accept: application/json" -d @examples/morning-receipt.json
+```
+GET request: 
+```
+curl http://localhost/receipts/{id}/points
+```
+
+2. Using Postman
+POST request:
+```
+http://localhost:5000/receipts/process
+```
+Add a parameter under the Headers tab - Key=`Content-Type`, Value=`application/json`
+Add your JSON input in Body and press Send.
+
+GET request:
+```
+http://localhost:5000/receipts/{id}/points
+```
 
 ## Language Selection
 
