@@ -154,6 +154,9 @@ def date_points(date: str) -> int:
     """
     try:
         points = 0
+        # check if date string is in YYYY-MM-DD format
+        if len(date.split('-')) != 3 and len(date.split('-')[0]) != 4:
+            return 0
         if int(date.split('-')[2]) % 2 != 0:
             points += 6
         return points
@@ -166,12 +169,15 @@ def time_points(time: str) -> int:
     """
     This function calculates points awarded for a given time.
     Args:
-        time (str): The time.
+        time (str): The time in 24-hour format -> HH:MM
     Returns:
         int: The points awarded.
     """
     try:
         points = 0
+        # check if time string is valid
+        if len(time.split(':')) != 2:
+            return 0
         if 14 <= int(time.split(':')[0]) <= 16:
             points += 10
         print("time: ", points)
