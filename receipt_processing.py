@@ -1,11 +1,12 @@
 import uuid
 import re
 import math
+import json
 
 
 RECEIPTS = {}
 
-def generate_id(data: dict) -> dict:
+def generate_id(data) -> dict:
     """
     This function generates a unique ID for a receipt.
     Args:
@@ -14,15 +15,20 @@ def generate_id(data: dict) -> dict:
         dict: The ID.
     """
     try: 
-        id = str(uuid.uuid4())
+        # check if receipt already exists
+        json_string = json.dumps(data, sort_keys=True)
+        existing_id = None
+        for key, value in RECEIPTS.items():
+            if json.dumps(value, sort_keys=True) == json_string:
+                existing_id = key
+                break
 
-        # check if ID already exists, if so, generate a new one.
-        while id in RECEIPTS:
+        if existing_id: # return existing ID if receipt already exists
+            return {'id': existing_id}
+        else: # generate new ID if receipt does not exist
             id = str(uuid.uuid4())
-
-        RECEIPTS[id] = data
-
-        return {'id': id}
+            RECEIPTS[id] = data
+            return {'id': id}
     except Exception as e:
         print(e)
         return {'message': 'Something went wrong! Error: {}'.format(e)}
