@@ -26,11 +26,16 @@ def generate_id(data) -> dict:
         if existing_id: # return existing ID if receipt already exists
             return {'id': existing_id}
         else: # generate new ID if receipt does not exist
-            id = str(uuid.uuid4())
-            RECEIPTS[id] = data
-            return {'id': id}
+            required_keys = set(['retailer', 'total', 'items', 'purchaseDate', 'purchaseTime'])
+            
+            if required_keys.issubset(set(data.keys())):
+                id = str(uuid.uuid4())
+                RECEIPTS[id] = data
+                print("Receipts: ", RECEIPTS)
+                return {'id': id}
+            else:
+                return {'message': 'Error! Missing required keys. Required keys: {}'.format(required_keys)}
     except Exception as e:
-        print(e)
         return {'message': 'Something went wrong! Error: {}'.format(e)}
 
 
@@ -50,11 +55,12 @@ def generate_points(id: str) -> dict:
         dict: The points awarded.
     """
     try: 
-        receipt = RECEIPTS.get(id)
+        print("ID: ", id)
+        receipt = RECEIPTS[id]
         
         print("Retrieved receipt: ", receipt)
-       
-        total_points_awarded = retailer_points(receipt['retailer']) + total_points(receipt['total']) + items_points(receipt['items']) + description_points(receipt['items']) + date_points(receipt['purchaseDate']) + time_points(receipt['purchaseTime'])
+        total_points_awarded = 0
+        total_points_awarded += retailer_points(receipt['retailer']) + total_points(receipt['total']) + items_points(receipt['items']) + description_points(receipt['items']) + date_points(receipt['purchaseDate']) + time_points(receipt['purchaseTime'])
         print(total_points_awarded)
         return {'points': total_points_awarded}
     except Exception as e:
@@ -72,26 +78,26 @@ def retailer_points(retailer: str) -> int:
     """
     try:
         pattern = re.compile(r"[^\w]")
-        print("retailer: ", len(pattern.sub('', retailer)))
         return len(pattern.sub('', retailer))
     
     except Exception as e:
         print(e)
         return 0
     
-def total_points(total: float) -> int:
+def total_points(total: str) -> int:
     """
     This function calculates points awarded for a given total.
     Args:
-        total (float): The total.
+        total (str): The total.
     Returns:
         int: The points awarded.
     """
     try:
         points = 0
-        if total % 1 == 0:
+        total = float(total)
+        if total % 1 == 0.0:
             points += 50
-        if total % 0.25 == 0:
+        if total % 0.25 == 0.0:
             points += 25
         print("total: ", points)
         return points
@@ -104,7 +110,7 @@ def items_points(items: list) -> int:
     """
     This function calculates points awarded for a given list of items.
     Args:
-        items (list): The items.
+        items (list): List of dictionaries containing item details.
     Returns:
         int: The points awarded.
     """
@@ -129,10 +135,7 @@ def description_points(items: list) -> int:
         for item in items:
             description = item['shortDescription']
             price = float(item['price'])
-            print("description length: ", len(description.strip()))
             if len(description.strip()) % 3 == 0:
-                print("price per item: ", price * 0.2)  
-                print("rounded price per item: ", math.ceil(price * 0.2))
                 points += math.ceil(price * 0.2)
         print("description: ", points)
         return points
@@ -153,7 +156,6 @@ def date_points(date: str) -> int:
         points = 0
         if int(date.split('-')[2]) % 2 != 0:
             points += 6
-        print("date: ", points)
         return points
     
     except Exception as e:
@@ -170,7 +172,7 @@ def time_points(time: str) -> int:
     """
     try:
         points = 0
-        if 1400 <= int(time.split(':')[0]) <= 1600:
+        if 14 <= int(time.split(':')[0]) <= 16:
             points += 10
         print("time: ", points)
         return points

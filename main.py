@@ -9,6 +9,7 @@ RECEIPTS = {}
 def index() -> Response:
     return jsonify({'message': 'Hello, World!'})
 
+
 @app.route('/receipts/process', methods=['POST'])
 def process_receipts() -> Response:
     """
@@ -19,7 +20,9 @@ def process_receipts() -> Response:
         abort(400, description='No data provided.')
 
     response = generate_id(data)
+    print(response)
     return jsonify(response)
+
 
 @app.route('/receipts/<id>/points', methods=['GET'])
 def points_awarded(id) -> Response:
@@ -31,6 +34,7 @@ def points_awarded(id) -> Response:
         abort(400, description='Please provide an ID.')
     
     points = generate_points(id)
+    print(points)
     
     return jsonify(points)
 
