@@ -22,7 +22,9 @@ docker build --tag fetch-image .
 ```
 
 To check if image is created without errors use the below command and see if your image is present in the list:
-```docker images```
+```
+docker images
+```
 
 To run the docker image:
 ```
