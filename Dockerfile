@@ -7,6 +7,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+EXPOSE 5000
 
-CMD ["flask", "--app", "main:app", "--debug", "run", "--port", "8000"]
+CMD ["flask", "--app", "main:app", "--debug", "run", "--port", "5000", "--host", "0.0.0.0"]
