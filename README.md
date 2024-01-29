@@ -16,12 +16,13 @@ Navigate inside the cloned repository using the below command:
 cd <path to repository>
 ```
 
-The next step is building a docker image:
+Building a docker image:
 ```
 docker build --tag fetch-image .
 ```
 
-To check if it is created without errors: `docker images`
+To check if image is created without errors use the below command and see if your image is present in the list:
+```docker images```
 
 To run the docker image:
 ```
@@ -42,6 +43,7 @@ curl http://localhost/receipts/{id}/points
 ```
 
 2. Using Postman
+
 POST request:
 ```
 http://localhost:5000/receipts/process
